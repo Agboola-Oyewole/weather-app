@@ -1,4 +1,4 @@
-import 'package:clima_weather/screens/home_screen.dart';
+import 'package:clima_weather/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -7,6 +7,6 @@ void main() {
     theme: ThemeData(
       fontFamily: 'Inter', // Set your custom font family here
     ),
-    home: const HomeScreen(),
+    home: const LoadingScreen(),
   ));
 }

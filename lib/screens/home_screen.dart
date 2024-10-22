@@ -1,10 +1,14 @@
+import 'package:clima_weather/screens/search_cities.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../data/location_data.dart';
 import '../data/weather_data.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.weatherData});
+
+  final Map<String, dynamic>? weatherData;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,12 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final WeatherService _weatherService = WeatherService();
   Map<String, dynamic>? weatherData;
 
-  @override
-  void initState() {
-    super.initState();
-    _getWeatherData();
-  }
-
   IconData getWeatherIcon(double tempCelsius, String condition) {
     if (tempCelsius >= 30) {
       // Hot weather - sunny
@@ -27,23 +25,25 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (tempCelsius >= 20 && tempCelsius < 30) {
       // Warm weather - sunny with some clouds
       if (condition.contains('cloud')) {
-        return Icons.wb_cloudy;
+        return Icons.wb_cloudy; // Cloudy icon
       } else {
-        return Icons.wb_sunny;
+        return Icons.wb_sunny; // Sunny icon
       }
     } else if (tempCelsius >= 10 && tempCelsius < 20) {
       // Cool weather - partly cloudy or rainy
       if (condition.contains('rain')) {
-        return Icons.cloudy_snowing; // Example for rain
+        return Icons.cloudy_snowing; // Rain icon
       } else if (condition.contains('cloud')) {
-        return Icons.cloud;
+        return Icons.cloud; // Partly cloudy
       } else {
         return Icons.wb_sunny; // Still sunny, but cooler
       }
     } else if (tempCelsius < 10) {
       // Cold weather - cloudy or rainy
       if (condition.contains('rain')) {
-        return Icons.cloudy_snowing; // Example for rain
+        return Icons.cloudy_snowing; // Rain icon
+      } else if (condition.contains('snow')) {
+        return Icons.ac_unit; // Snow icon
       } else {
         return Icons.cloud; // Cloudy
       }
@@ -78,7 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
     String daySuffix = getDayOfMonthSuffix(parsedDate.day);
 
     // Combine the formatted date with the day suffix
-    return '${DateFormat('EEE').format(parsedDate)} ${parsedDate.day}$daySuffix ${DateFormat('MMM').format(parsedDate)}';
+    return '${DateFormat('EEE').format(parsedDate)} ${parsedDate
+        .day}$daySuffix ${DateFormat('MMM').format(parsedDate)}';
   }
 
   String getDayOfMonthSuffix(int day) {
@@ -97,15 +98,29 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<String> getLocation() async {
+    Location location = Location();
+    await location.determinePosition(context);
+    String longLat = '${location.latitude},${location.longitude}';
+    return longLat;
+  }
+
   void _getWeatherData() async {
     try {
-      final data = await _weatherService.fetchWeatherData('London');
+      final coordinates = await getLocation();
+      print(coordinates);
+      final data = await _weatherService.fetchWeatherData(coordinates);
       setState(() {
         weatherData = data;
       });
       print(weatherData);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => HomeScreen(weatherData: weatherData)),
+      );
     } catch (e) {
       print('Error fetching weather: $e');
+      // Optionally, you can show an error message or navigate to an error screen here
     }
   }
 
@@ -120,11 +135,12 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(isWeatherClear(
-                          weatherData!['current']['condition']['text'])
+                      widget.weatherData!['current']['condition']['text'])
                       ? 'images/pexels-elia-clerici-282848-912110.jpg'
                       : 'images/pexels-pixabay-414659.jpg'),
-                  // Add your image path here
-                  fit: BoxFit.cover, // Makes the image cover the entire screen
+                  fit: BoxFit.cover,
+                  // Fills the entire Scaffold but keeps the image centered
+                  alignment: Alignment.center, // Ensures the image is centered
                 ),
               ),
             ),
@@ -136,19 +152,43 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: 30.0,
+                      GestureDetector(
+                        child: Icon(
+                          Icons.my_location_outlined,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                        onTap: () {
+                          _getWeatherData();
+                        },
                       ),
-                      SizedBox(width: 20.0),
-                      Icon(
-                        Icons.settings_sharp,
-                        color: Colors.white,
-                        size: 30.0,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.white,
+                              size: 30.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const SearchCities()));
+                            },
+                          ),
+                          SizedBox(width: 20.0),
+                          Icon(
+                            Icons.settings_sharp,
+                            color: Colors.white,
+                            size: 30.0,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -161,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           const SizedBox(height: 10.0),
                           Text(
-                            weatherData?['location']['name'],
+                            widget.weatherData?['location']['name'],
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -170,15 +210,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 10.0),
                           Text(
-                            '${weatherData!['current']['temp_c'].toString()}°',
+                            '${widget.weatherData!['current']['temp_c']
+                                .toString()}°',
                             style: TextStyle(
                                 fontSize: 90,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900),
                           ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            "High: ${widget
+                                .weatherData!['forecast']['forecastday'][0]['day']['maxtemp_c']}° / Low: ${widget
+                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_c']}°",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18),
+                          ),
                           const SizedBox(height: 10.0),
                           Text(
-                            '${weatherData!['current']['condition']['text']}',
+                            '${widget
+                                .weatherData!['current']['condition']['text']}',
                             style: TextStyle(
                                 fontSize: 23,
                                 color: Colors.white,
@@ -186,7 +240,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 15.0),
                           Text(
-                            'Last Updated: ${formatDate(weatherData!['current']['last_updated'].toString())} ${weatherData!['current']['last_updated'].toString().split(' ')[1]}',
+                            'Last Updated: ${formatDate(
+                                widget.weatherData!['current']['last_updated']
+                                    .toString())} ${widget
+                                .weatherData!['current']['last_updated']
+                                .toString()
+                                .split(' ')[1]}',
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Colors.white,
@@ -199,13 +258,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                               color: Colors.black45.withOpacity(0.4),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(6.0)),
+                              const BorderRadius.all(Radius.circular(6.0)),
                             ),
                             child: Column(
                               children: [
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -244,10 +303,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 30.0),
                                 Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 0.0),
+                                  EdgeInsets.symmetric(horizontal: 0.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         'Today',
@@ -260,15 +319,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
-                                                weatherData!['current']
-                                                    ['temp_c'],
-                                                weatherData!['current']
-                                                    ['condition']['text']),
+                                                widget.weatherData!['current']
+                                                ['temp_c'],
+                                                widget.weatherData!['current']
+                                                ['condition']['text']),
                                             color: Colors.white,
                                           ),
-                                          SizedBox(width: 70.0),
+                                          SizedBox(width: 50.0),
                                           Text(
-                                            '${weatherData!['current']['temp_c'].toString()}°',
+                                            '${widget
+                                                .weatherData!['forecast']['forecastday'][0]['day']['maxtemp_c']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_c']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -282,10 +343,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 15.0),
                                 Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 0.0),
+                                  EdgeInsets.symmetric(horizontal: 0.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         'Tomorrow',
@@ -298,18 +359,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
-                                                weatherData!['forecast']
-                                                        ['forecastday'][1]
-                                                    ['day']['avgtemp_c'],
-                                                weatherData!['forecast']
-                                                            ['forecastday'][1]
-                                                        ['day']['condition']
-                                                    ['text']),
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][1]
+                                                ['day']['avgtemp_c'],
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][1]
+                                                ['day']['condition']
+                                                ['text']),
                                             color: Colors.white,
                                           ),
-                                          SizedBox(width: 70.0),
+                                          SizedBox(width: 50.0),
                                           Text(
-                                            '${weatherData!['forecast']['forecastday'][1]['day']['avgtemp_c'].toString()}°',
+                                            '${widget
+                                                .weatherData!['forecast']['forecastday'][1]['day']['maxtemp_c']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][1]['day']['mintemp_c']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -323,13 +386,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 15.0),
                                 Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 0.0),
+                                  EdgeInsets.symmetric(horizontal: 0.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${formatDate(weatherData!['forecast']['forecastday'][2]['date'])}',
+                                        '${formatDate(widget
+                                            .weatherData!['forecast']['forecastday'][2]['date'])}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w900,
@@ -339,18 +403,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
-                                                weatherData!['forecast']
-                                                        ['forecastday'][2]
-                                                    ['day']['avgtemp_c'],
-                                                weatherData!['forecast']
-                                                            ['forecastday'][2]
-                                                        ['day']['condition']
-                                                    ['text']),
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][2]
+                                                ['day']['avgtemp_c'],
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][2]
+                                                ['day']['condition']
+                                                ['text']),
                                             color: Colors.white,
                                           ),
-                                          SizedBox(width: 70.0),
+                                          SizedBox(width: 50.0),
                                           Text(
-                                            '${weatherData!['forecast']['forecastday'][2]['day']['avgtemp_c'].toString()}°',
+                                            '${widget
+                                                .weatherData!['forecast']['forecastday'][2]['day']['maxtemp_c']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][2]['day']['mintemp_c']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -364,13 +430,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 15.0),
                                 Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 0.0),
+                                  EdgeInsets.symmetric(horizontal: 0.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${formatDate(weatherData!['forecast']['forecastday'][3]['date'])}',
+                                        '${formatDate(widget
+                                            .weatherData!['forecast']['forecastday'][3]['date'])}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w900,
@@ -380,18 +447,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
-                                                weatherData!['forecast']
-                                                        ['forecastday'][3]
-                                                    ['day']['avgtemp_c'],
-                                                weatherData!['forecast']
-                                                            ['forecastday'][3]
-                                                        ['day']['condition']
-                                                    ['text']),
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][3]
+                                                ['day']['avgtemp_c'],
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][3]
+                                                ['day']['condition']
+                                                ['text']),
                                             color: Colors.white,
                                           ),
-                                          SizedBox(width: 70.0),
+                                          SizedBox(width: 50.0),
                                           Text(
-                                            '${weatherData!['forecast']['forecastday'][3]['day']['avgtemp_c'].toString()}°',
+                                            '${widget
+                                                .weatherData!['forecast']['forecastday'][3]['day']['maxtemp_c']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][3]['day']['mintemp_c']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -405,13 +474,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(height: 15.0),
                                 Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 0.0),
+                                  EdgeInsets.symmetric(horizontal: 0.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${formatDate(weatherData!['forecast']['forecastday'][4]['date'])}',
+                                        '${formatDate(widget
+                                            .weatherData!['forecast']['forecastday'][4]['date'])}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w900,
@@ -421,18 +491,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
-                                                weatherData!['forecast']
-                                                        ['forecastday'][4]
-                                                    ['day']['avgtemp_c'],
-                                                weatherData!['forecast']
-                                                            ['forecastday'][4]
-                                                        ['day']['condition']
-                                                    ['text']),
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][4]
+                                                ['day']['avgtemp_c'],
+                                                widget.weatherData!['forecast']
+                                                ['forecastday'][4]
+                                                ['day']['condition']
+                                                ['text']),
                                             color: Colors.white,
                                           ),
-                                          SizedBox(width: 70.0),
+                                          SizedBox(width: 50.0),
                                           Text(
-                                            '${weatherData!['forecast']['forecastday'][4]['day']['avgtemp_c'].toString()}°',
+                                            '${widget
+                                                .weatherData!['forecast']['forecastday'][4]['day']['maxtemp_c']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][4]['day']['mintemp_c']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -481,7 +553,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${weatherData!['current']['uv'].toString()}',
+                                        '${widget.weatherData!['current']['uv']
+                                            .toString()}',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
@@ -514,7 +587,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${weatherData!['current']['humidity'].toString()}%',
+                                        '${widget
+                                            .weatherData!['current']['humidity']
+                                            .toString()}%',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
@@ -551,7 +626,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${weatherData!['current']['cloud'].toString()}%',
+                                        '${widget
+                                            .weatherData!['current']['cloud']
+                                            .toString()}%',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
@@ -584,7 +661,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${weatherData!['current']['precip_mm'].toString()} mm',
+                                        '${widget
+                                            .weatherData!['current']['precip_mm']
+                                            .toString()} mm',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
@@ -621,7 +700,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${weatherData!['current']['pressure_mb'].toString()}',
+                                        '${widget
+                                            .weatherData!['current']['pressure_mb']
+                                            .toString()}',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
@@ -654,7 +735,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${weatherData!['current']['wind_mph'].toString()} mph',
+                                        '${widget
+                                            .weatherData!['current']['wind_mph']
+                                            .toString()} mph',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,

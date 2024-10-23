@@ -83,41 +83,42 @@ class _LoadingScreenState extends State<LoadingScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff181C14),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FadeTransition(
-            opacity: _animation,
-            child: Container(
-              height: 150,
-              width: 150,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/cloud-removebg-preview.png'),
-                  fit: BoxFit.cover,
-                  // Fills the entire Scaffold but keeps the image centered
-                  alignment: Alignment.center, // Ensures the image is centered
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 13,
-          ),
-          Center(
-            child: FadeTransition(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        // Add padding to avoid edge clipping
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FadeTransition(
               opacity: _animation,
-              child: const Text(
-                'Clima Weather', // Replace with your app's name
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white, // Make sure to use the correct font here
+              child: Container(
+                height: 150,
+                width: 150,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('images/cloud-removebg-preview.png'),
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+            SizedBox(height: 13),
+            Center(
+              child: FadeTransition(
+                opacity: _animation,
+                child: const Text(
+                  'Clima Weather', // App's name
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,11 @@
 import 'package:clima_weather/screens/search_cities.dart';
+import 'package:clima_weather/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../data/location_data.dart';
+import '../data/units_data.dart';
 import '../data/weather_data.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -183,10 +186,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                           SizedBox(width: 20.0),
-                          Icon(
-                            Icons.settings_sharp,
-                            color: Colors.white,
-                            size: 30.0,
+                          GestureDetector(
+                            child: Icon(
+                              Icons.settings_sharp,
+                              color: Colors.white,
+                              size: 30.0,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const SettingsScreen()));
+                            },
                           ),
                         ],
                       ),
@@ -209,21 +221,53 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           const SizedBox(height: 10.0),
-                          Text(
-                            '${widget.weatherData!['current']['temp_c']
-                                .toString()}°',
-                            style: TextStyle(
-                                fontSize: 90,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                Provider
+                                    .of<UnitData>(context)
+                                    .selectedTempUnit ==
+                                    '°C'
+                                    ? '${widget
+                                    .weatherData!['current']['temp_c']
+                                    .toString()}°'
+                                    : '${widget
+                                    .weatherData!['current']['temp_f']
+                                    .toString()}°',
+                                style: TextStyle(
+                                    fontSize: 90,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 25.0),
+                                child: Text(
+                                  Provider
+                                      .of<UnitData>(context)
+                                      .selectedTempUnit,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 20),
+                                ),
+                              )
+                            ],
                           ),
                           const SizedBox(
                             height: 10.0,
                           ),
                           Text(
-                            "High: ${widget
+                            Provider
+                                .of<UnitData>(context)
+                                .selectedTempUnit ==
+                                '°C'
+                                ? "High: ${widget
                                 .weatherData!['forecast']['forecastday'][0]['day']['maxtemp_c']}° / Low: ${widget
-                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_c']}°",
+                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_c']}°"
+                                : "High: ${widget
+                                .weatherData!['forecast']['forecastday'][0]['day']['maxtemp_f']}° / Low: ${widget
+                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_f']}°",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
@@ -282,22 +326,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         )
                                       ],
                                     ),
-                                    // Row(
-                                    //   children: [
-                                    //     Text(
-                                    //       'More Details',
-                                    //       style: TextStyle(
-                                    //           color: Colors.white,
-                                    //           fontWeight: FontWeight.w900,
-                                    //           fontSize: 16.0),
-                                    //     ),
-                                    //     SizedBox(width: 5.0),
-                                    //     Icon(
-                                    //       Icons.arrow_drop_down,
-                                    //       color: Colors.white,
-                                    //     ),
-                                    //   ],
-                                    // )
                                   ],
                                 ),
                                 SizedBox(height: 30.0),
@@ -319,17 +347,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
-                                                widget.weatherData!['current']
-                                                ['temp_c'],
+                                                Provider
+                                                    .of<UnitData>(context)
+                                                    .selectedTempUnit ==
+                                                    '°C'
+                                                    ? widget.weatherData![
+                                                'current']['temp_c']
+                                                    : widget.weatherData![
+                                                'current']['temp_f'],
                                                 widget.weatherData!['current']
                                                 ['condition']['text']),
                                             color: Colors.white,
                                           ),
                                           SizedBox(width: 50.0),
                                           Text(
-                                            '${widget
+                                            Provider
+                                                .of<UnitData>(context)
+                                                .selectedTempUnit ==
+                                                '°C'
+                                                ? '${widget
                                                 .weatherData!['forecast']['forecastday'][0]['day']['maxtemp_c']}° / ${widget
-                                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_c']}°',
+                                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_c']}°'
+                                                : '${widget
+                                                .weatherData!['forecast']['forecastday'][0]['day']['maxtemp_f']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][0]['day']['mintemp_f']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -359,9 +400,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
+                                                Provider
+                                                    .of<UnitData>(context)
+                                                    .selectedTempUnit ==
+                                                    '°C' ?
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][1]
-                                                ['day']['avgtemp_c'],
+                                                ['day']['avgtemp_c'] : widget
+                                                    .weatherData!['forecast']
+                                                ['forecastday'][1]
+                                                ['day']['avgtemp_f'],
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][1]
                                                 ['day']['condition']
@@ -370,9 +418,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           SizedBox(width: 50.0),
                                           Text(
-                                            '${widget
+                                            Provider
+                                                .of<UnitData>(context)
+                                                .selectedTempUnit ==
+                                                '°C'
+                                                ? '${widget
                                                 .weatherData!['forecast']['forecastday'][1]['day']['maxtemp_c']}° / ${widget
-                                                .weatherData!['forecast']['forecastday'][1]['day']['mintemp_c']}°',
+                                                .weatherData!['forecast']['forecastday'][1]['day']['mintemp_c']}°'
+                                                : '${widget
+                                                .weatherData!['forecast']['forecastday'][1]['day']['maxtemp_f']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][1]['day']['mintemp_f']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -403,9 +458,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
+                                                Provider
+                                                    .of<UnitData>(context)
+                                                    .selectedTempUnit ==
+                                                    '°C' ?
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][2]
-                                                ['day']['avgtemp_c'],
+                                                ['day']['avgtemp_c'] : widget
+                                                    .weatherData!['forecast']
+                                                ['forecastday'][2]
+                                                ['day']['avgtemp_f'],
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][2]
                                                 ['day']['condition']
@@ -414,9 +476,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           SizedBox(width: 50.0),
                                           Text(
+                                            Provider
+                                                .of<UnitData>(context)
+                                                .selectedTempUnit ==
+                                                '°C'
+                                                ?
                                             '${widget
                                                 .weatherData!['forecast']['forecastday'][2]['day']['maxtemp_c']}° / ${widget
-                                                .weatherData!['forecast']['forecastday'][2]['day']['mintemp_c']}°',
+                                                .weatherData!['forecast']['forecastday'][2]['day']['mintemp_c']}°'
+                                                : '${widget
+                                                .weatherData!['forecast']['forecastday'][2]['day']['maxtemp_f']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][2]['day']['mintemp_f']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -447,9 +517,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
+                                                Provider
+                                                    .of<UnitData>(context)
+                                                    .selectedTempUnit ==
+                                                    '°C' ?
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][3]
-                                                ['day']['avgtemp_c'],
+                                                ['day']['avgtemp_c'] : widget
+                                                    .weatherData!['forecast']
+                                                ['forecastday'][3]
+                                                ['day']['avgtemp_f'],
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][3]
                                                 ['day']['condition']
@@ -457,10 +534,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: Colors.white,
                                           ),
                                           SizedBox(width: 50.0),
-                                          Text(
-                                            '${widget
-                                                .weatherData!['forecast']['forecastday'][3]['day']['maxtemp_c']}° / ${widget
-                                                .weatherData!['forecast']['forecastday'][3]['day']['mintemp_c']}°',
+                                          Text(Provider
+                                              .of<UnitData>(context)
+                                              .selectedTempUnit ==
+                                              '°C'
+                                              ?
+                                          '${widget
+                                              .weatherData!['forecast']['forecastday'][3]['day']['maxtemp_c']}° / ${widget
+                                              .weatherData!['forecast']['forecastday'][3]['day']['mintemp_c']}°'
+                                              : '${widget
+                                              .weatherData!['forecast']['forecastday'][3]['day']['maxtemp_f']}° / ${widget
+                                              .weatherData!['forecast']['forecastday'][3]['day']['mintemp_f']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -491,9 +575,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Icon(
                                             getWeatherIcon(
+                                                Provider
+                                                    .of<UnitData>(context)
+                                                    .selectedTempUnit ==
+                                                    '°C' ?
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][4]
-                                                ['day']['avgtemp_c'],
+                                                ['day']['avgtemp_c'] : widget
+                                                    .weatherData!['forecast']
+                                                ['forecastday'][4]
+                                                ['day']['avgtemp_f'],
                                                 widget.weatherData!['forecast']
                                                 ['forecastday'][4]
                                                 ['day']['condition']
@@ -502,9 +593,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           SizedBox(width: 50.0),
                                           Text(
+                                            Provider
+                                                .of<UnitData>(context)
+                                                .selectedTempUnit ==
+                                                '°C'
+                                                ?
                                             '${widget
                                                 .weatherData!['forecast']['forecastday'][4]['day']['maxtemp_c']}° / ${widget
-                                                .weatherData!['forecast']['forecastday'][4]['day']['mintemp_c']}°',
+                                                .weatherData!['forecast']['forecastday'][4]['day']['mintemp_c']}°'
+                                                : '${widget
+                                                .weatherData!['forecast']['forecastday'][4]['day']['maxtemp_f']}° / ${widget
+                                                .weatherData!['forecast']['forecastday'][4]['day']['mintemp_f']}°',
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w900,
@@ -692,17 +791,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Column(
                                     children: [
                                       Text(
-                                        'Pressure (mb)',
+                                        'Pressure',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
                                             color: Colors.white),
                                       ),
                                       SizedBox(height: 20.0),
-                                      Text(
-                                        '${widget
-                                            .weatherData!['current']['pressure_mb']
-                                            .toString()}',
+                                      Text(Provider
+                                          .of<UnitData>(context)
+                                          .selectedPressureUnit ==
+                                          'mb' ?
+                                      '${widget
+                                          .weatherData!['current']['pressure_mb']
+                                          .toString()} ${Provider
+                                          .of<UnitData>(context)
+                                          .selectedPressureUnit}' : '${widget
+                                          .weatherData!['current']['pressure_in']
+                                          .toString()} ${Provider
+                                          .of<UnitData>(context)
+                                          .selectedPressureUnit}',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,
@@ -734,10 +842,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                             color: Colors.white),
                                       ),
                                       SizedBox(height: 20.0),
-                                      Text(
-                                        '${widget
-                                            .weatherData!['current']['wind_mph']
-                                            .toString()} mph',
+                                      Text(Provider
+                                          .of<UnitData>(context)
+                                          .selectedWindUnit ==
+                                          'mph' ?
+                                      '${widget
+                                          .weatherData!['current']['wind_mph']
+                                          .toString()} ${Provider
+                                          .of<UnitData>(context)
+                                          .selectedWindUnit}' : '${widget
+                                          .weatherData!['current']['wind_kph']
+                                          .toString()} ${Provider
+                                          .of<UnitData>(context)
+                                          .selectedWindUnit}',
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,

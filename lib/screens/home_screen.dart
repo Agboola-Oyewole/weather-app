@@ -8,6 +8,8 @@ import '../data/location_data.dart';
 import '../data/units_data.dart';
 import '../data/weather_data.dart';
 
+// TODO: ADD PRECIPITATION UNIT
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.weatherData});
 
@@ -760,9 +762,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
+                                        Provider
+                                            .of<UnitData>(context)
+                                            .selectedPrecipitationUnit ==
+                                            'mm'
+                                            ?
                                         '${widget
                                             .weatherData!['current']['precip_mm']
-                                            .toString()} mm',
+                                            .toString()} ${Provider
+                                            .of<UnitData>(context)
+                                            .selectedPrecipitationUnit}'
+                                            : '${widget
+                                            .weatherData!['current']['precip_in']
+                                            .toString()} ${Provider
+                                            .of<UnitData>(context)
+                                            .selectedPrecipitationUnit}'
+                                        ,
                                         style: TextStyle(
                                             fontSize: 20.0,
                                             fontWeight: FontWeight.w900,

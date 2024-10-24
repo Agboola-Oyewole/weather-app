@@ -41,11 +41,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         topRight: Radius.circular(10.0),
                         topLeft: Radius.circular(10.0)),
                     color:
-                    Provider
-                        .of<UnitData>(context)
-                        .selectedTempUnit == '°C'
-                        ? Colors.grey
-                        : Color(0xff373A40)),
+                        Provider.of<UnitData>(context).selectedTempUnit == '°C'
+                            ? Colors.grey
+                            : Color(0xff373A40)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -56,9 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           fontWeight: FontWeight.w900,
                           fontSize: 20),
                     ),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedTempUnit == '°C')
+                    if (Provider.of<UnitData>(context).selectedTempUnit == '°C')
                       const Icon(Icons.check, color: Colors.white),
                   ],
                 ),
@@ -79,9 +75,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(10.0),
                       bottomLeft: Radius.circular(10.0)),
-                  color: Provider
-                      .of<UnitData>(context)
-                      .selectedTempUnit == '°F'
+                  color: Provider.of<UnitData>(context).selectedTempUnit == '°F'
                       ? Colors.grey
                       : Color(0xff373A40),
                 ),
@@ -93,9 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 20)),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedTempUnit == '°F')
+                    if (Provider.of<UnitData>(context).selectedTempUnit == '°F')
                       const Icon(Icons.check, color: Colors.white),
                   ],
                 ),
@@ -137,11 +129,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         topRight: Radius.circular(10.0),
                         topLeft: Radius.circular(10.0)),
                     color:
-                    Provider
-                        .of<UnitData>(context)
-                        .selectedWindUnit == 'mph'
-                        ? Colors.grey
-                        : Color(0xff373A40)),
+                        Provider.of<UnitData>(context).selectedWindUnit == 'mph'
+                            ? Colors.grey
+                            : Color(0xff373A40)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -152,9 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           fontWeight: FontWeight.w900,
                           fontSize: 20),
                     ),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedWindUnit ==
+                    if (Provider.of<UnitData>(context).selectedWindUnit ==
                         'mph')
                       const Icon(Icons.check, color: Colors.white),
                   ],
@@ -177,11 +165,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       bottomRight: Radius.circular(10.0),
                       bottomLeft: Radius.circular(10.0)),
                   color:
-                  Provider
-                      .of<UnitData>(context)
-                      .selectedWindUnit == 'km/h'
-                      ? Colors.grey
-                      : Color(0xff373A40),
+                      Provider.of<UnitData>(context).selectedWindUnit == 'km/h'
+                          ? Colors.grey
+                          : Color(0xff373A40),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -191,9 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 20)),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedWindUnit ==
+                    if (Provider.of<UnitData>(context).selectedWindUnit ==
                         'km/h')
                       const Icon(Icons.check, color: Colors.white),
                   ],
@@ -236,12 +220,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         topRight: Radius.circular(10.0),
                         topLeft: Radius.circular(10.0)),
                     color:
-                    Provider
-                        .of<UnitData>(context)
-                        .selectedPressureUnit ==
-                        'mb'
-                        ? Colors.grey
-                        : Color(0xff373A40)),
+                        Provider.of<UnitData>(context).selectedPressureUnit ==
+                                'mb'
+                            ? Colors.grey
+                            : Color(0xff373A40)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -252,9 +234,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           fontWeight: FontWeight.w900,
                           fontSize: 20),
                     ),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedPressureUnit ==
+                    if (Provider.of<UnitData>(context).selectedPressureUnit ==
                         'mb')
                       const Icon(Icons.check, color: Colors.white),
                   ],
@@ -276,10 +256,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(10.0),
                       bottomLeft: Radius.circular(10.0)),
-                  color: Provider
-                      .of<UnitData>(context)
-                      .selectedPressureUnit ==
-                      'inHg'
+                  color: Provider.of<UnitData>(context).selectedPressureUnit ==
+                          'inHg'
                       ? Colors.grey
                       : Color(0xff373A40),
                 ),
@@ -291,9 +269,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 20)),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedPressureUnit ==
+                    if (Provider.of<UnitData>(context).selectedPressureUnit ==
                         'inHg')
                       const Icon(Icons.check, color: Colors.white),
                   ],
@@ -335,11 +311,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(10.0),
                         topLeft: Radius.circular(10.0)),
-                    color:
-                    Provider
-                        .of<UnitData>(context)
-                        .selectedPrecipitationUnit ==
-                        'mm'
+                    color: Provider.of<UnitData>(context)
+                                .selectedPrecipitationUnit ==
+                            'mm'
                         ? Colors.grey
                         : Color(0xff373A40)),
                 child: Row(
@@ -352,9 +326,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           fontWeight: FontWeight.w900,
                           fontSize: 20),
                     ),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedPrecipitationUnit ==
+                    if (Provider.of<UnitData>(context)
+                            .selectedPrecipitationUnit ==
                         'mm')
                       const Icon(Icons.check, color: Colors.white),
                   ],
@@ -366,7 +339,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               onPressed: () {
                 setState(() {
                   Provider.of<UnitData>(context, listen: false)
-                      .updatePressureUnit('inHg');
+                      .updatePrecipitationUnit('inHg');
                 });
                 Navigator.pop(context); // Close the dialog
               },
@@ -376,10 +349,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderRadius: const BorderRadius.only(
                       bottomRight: Radius.circular(10.0),
                       bottomLeft: Radius.circular(10.0)),
-                  color: Provider
-                      .of<UnitData>(context)
-                      .selectedPrecipitationUnit ==
-                      'in'
+                  color: Provider.of<UnitData>(context)
+                              .selectedPrecipitationUnit ==
+                          'in'
                       ? Colors.grey
                       : Color(0xff373A40),
                 ),
@@ -391,9 +363,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
                             fontSize: 20)),
-                    if (Provider
-                        .of<UnitData>(context)
-                        .selectedPrecipitationUnit ==
+                    if (Provider.of<UnitData>(context)
+                            .selectedPrecipitationUnit ==
                         'in')
                       const Icon(Icons.check, color: Colors.white),
                   ],
@@ -459,9 +430,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: Row(
                       children: [
                         Text(
-                          Provider
-                              .of<UnitData>(context)
-                              .selectedTempUnit,
+                          Provider.of<UnitData>(context).selectedTempUnit,
                           style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                               fontWeight: FontWeight.w700,
@@ -517,10 +486,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           // Aligns text to the right
                           children: [
                             Text(
-                              Provider
-                                  .of<UnitData>(context)
-                                  .selectedWindUnit ==
-                                  'mph'
+                              Provider.of<UnitData>(context).selectedWindUnit ==
+                                      'mph'
                                   ? 'Miles per hour'
                                   : 'Kilometers per hour',
                               style: TextStyle(
@@ -530,10 +497,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                             Text(
-                              Provider
-                                  .of<UnitData>(context)
-                                  .selectedWindUnit ==
-                                  'mph'
+                              Provider.of<UnitData>(context).selectedWindUnit ==
+                                      'mph'
                                   ? '(mph)'
                                   : '(km/h)',
                               // Smaller unit abbreviation below
@@ -593,10 +558,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           // Aligns text to the right
                           children: [
                             Text(
-                              Provider
-                                  .of<UnitData>(context)
-                                  .selectedPressureUnit ==
-                                  'mb'
+                              Provider.of<UnitData>(context)
+                                          .selectedPressureUnit ==
+                                      'mb'
                                   ? 'Millibar'
                                   : 'Inches of',
                               style: TextStyle(
@@ -606,10 +570,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                             Text(
-                              Provider
-                                  .of<UnitData>(context)
-                                  .selectedPressureUnit ==
-                                  'mb'
+                              Provider.of<UnitData>(context)
+                                          .selectedPressureUnit ==
+                                      'mb'
                                   ? '(mb)'
                                   : 'mercury (inHg)',
                               // Smaller unit abbreviation below
@@ -670,10 +633,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           // Aligns text to the right
                           children: [
                             Text(
-                              Provider
-                                  .of<UnitData>(context)
-                                  .selectedPrecipitationUnit ==
-                                  'mm'
+                              Provider.of<UnitData>(context)
+                                          .selectedPrecipitationUnit ==
+                                      'mm'
                                   ? 'Millimeters'
                                   : 'Inches',
                               style: TextStyle(
@@ -683,10 +645,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                             ),
                             Text(
-                              Provider
-                                  .of<UnitData>(context)
-                                  .selectedPrecipitationUnit ==
-                                  'mm'
+                              Provider.of<UnitData>(context)
+                                          .selectedPrecipitationUnit ==
+                                      'mm'
                                   ? '(mm)'
                                   : '(in)',
                               // Smaller unit abbreviation below

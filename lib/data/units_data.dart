@@ -4,7 +4,7 @@ class UnitData extends ChangeNotifier {
   String _selectedTempUnit = '°C';
   String _selectedWindUnit = 'mph';
   String _selectedPressureUnit = 'mb';
-  String _selectedPrecipitationUnit = 'mb';
+  String _selectedPrecipitationUnit = 'mm';
 
   String get selectedTempUnit => _selectedTempUnit;
 

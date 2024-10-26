@@ -4,6 +4,7 @@ import 'package:clima_weather/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../data/location_data.dart';
+import '../data/notification_data.dart';
 import '../data/weather_data.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -56,21 +57,44 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   void _getWeatherData() async {
     try {
+      // Get location first
       final coordinates = await getLocation();
-      print(coordinates);
       final data = await _weatherService.fetchWeatherData(coordinates);
       setState(() {
         weatherData = data;
       });
-      print(weatherData);
-      Navigator.of(context).push(
+
+      // Request notification permissions only after fetching weather data
+      await NotificationService.requestNotificationPermission();
+
+      // Check if rain is expected
+      bool isRainExpected = _checkRainForecast(weatherData!);
+      if (isRainExpected) {
+        // Schedule the daily check after initialization
+        NotificationService.scheduleDailyWeatherCheck(
+          title: 'Rain Alert',
+          body: 'It\'s going to rain today! Remember to take an umbrella.',
+        );
+        print('Schedule created');
+      }
+
+      // Navigate to HomeScreen
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-            builder: (context) => HomeScreen(weatherData: weatherData)),
+          builder: (context) => HomeScreen(weatherData: weatherData),
+        ),
       );
     } catch (e) {
       print('Error fetching weather: $e');
-      // Optionally, you can show an error message or navigate to an error screen here
     }
+  }
+
+// Example function to check if rain is expected
+  bool _checkRainForecast(Map<String, dynamic> weatherData) {
+    // Logic to check if it will rain based on weatherData
+    return weatherData['current']['condition']['text']
+        .toLowerCase()
+        .contains('rain');
   }
 
   @override
@@ -96,7 +120,7 @@ class _LoadingScreenState extends State<LoadingScreen>
                 width: 150,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('images/cloud-removebg-preview.png'),
+                    image: AssetImage('images/ic_notification.png'),
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
                   ),

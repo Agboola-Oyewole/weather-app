@@ -415,260 +415,276 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 height: 30,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Temperature units',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 19),
-                  ),
-                  GestureDetector(
-                    onTap: _showTemperatureUnitDialog,
-                    child: Row(
-                      children: [
-                        Text(
-                          Provider.of<UnitData>(context).selectedTempUnit,
-                          style: TextStyle(
-                              color: Colors.white.withOpacity(0.5),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Left-side text (Wind speed units)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
                     children: [
-                      Text(
-                        'Wind Speed',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 19,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Temperature units',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 19),
+                          ),
+                          GestureDetector(
+                            onTap: _showTemperatureUnitDialog,
+                            child: Row(
+                              children: [
+                                Text(
+                                  Provider.of<UnitData>(context)
+                                      .selectedTempUnit,
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.5),
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      Text(
-                        'units',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 19,
-                        ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Left-side text (Wind speed units)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Wind Speed',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 19,
+                                ),
+                              ),
+                              Text(
+                                'units',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 19,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Right-side unit text with arrow dropdown
+                          GestureDetector(
+                            onTap: _showWindUnitDialog, // Method to show dialog
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  // Aligns text to the right
+                                  children: [
+                                    Text(
+                                      Provider.of<UnitData>(context)
+                                                  .selectedWindUnit ==
+                                              'mph'
+                                          ? 'Miles per hour'
+                                          : 'Kilometers per hour',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      Provider.of<UnitData>(context)
+                                                  .selectedWindUnit ==
+                                              'mph'
+                                          ? '(mph)'
+                                          : '(km/h)',
+                                      // Smaller unit abbreviation below
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 5),
+                                // Space between text and icon
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Left-side text (Wind speed units)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Atmospheric Pressure',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 19,
+                                ),
+                              ),
+                              Text(
+                                'units',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 19,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Right-side unit text with arrow dropdown
+                          GestureDetector(
+                            onTap: _showPressureUnitDialog,
+                            // Method to show dialog
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  // Aligns text to the right
+                                  children: [
+                                    Text(
+                                      Provider.of<UnitData>(context)
+                                                  .selectedPressureUnit ==
+                                              'mb'
+                                          ? 'Millibar'
+                                          : 'Inches of',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      Provider.of<UnitData>(context)
+                                                  .selectedPressureUnit ==
+                                              'mb'
+                                          ? '(mb)'
+                                          : 'mercury (inHg)',
+                                      // Smaller unit abbreviation below
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 5),
+                                // Space between text and icon
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Left-side text (Wind speed units)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Precipitation',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 19,
+                                ),
+                              ),
+                              Text(
+                                'units',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 19,
+                                ),
+                              ),
+                            ],
+                          ),
+                          // Right-side unit text with arrow dropdown
+                          GestureDetector(
+                            onTap: _showPrecipitationUnitDialog,
+                            // Method to show dialog
+                            child: Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  // Aligns text to the right
+                                  children: [
+                                    Text(
+                                      Provider.of<UnitData>(context)
+                                                  .selectedPrecipitationUnit ==
+                                              'mm'
+                                          ? 'Millimeters'
+                                          : 'Inches',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      Provider.of<UnitData>(context)
+                                                  .selectedPrecipitationUnit ==
+                                              'mm'
+                                          ? '(mm)'
+                                          : '(in)',
+                                      // Smaller unit abbreviation below
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.5),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 5),
+                                // Space between text and icon
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  // Right-side unit text with arrow dropdown
-                  GestureDetector(
-                    onTap: _showWindUnitDialog, // Method to show dialog
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          // Aligns text to the right
-                          children: [
-                            Text(
-                              Provider.of<UnitData>(context).selectedWindUnit ==
-                                      'mph'
-                                  ? 'Miles per hour'
-                                  : 'Kilometers per hour',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              Provider.of<UnitData>(context).selectedWindUnit ==
-                                      'mph'
-                                  ? '(mph)'
-                                  : '(km/h)',
-                              // Smaller unit abbreviation below
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 5), // Space between text and icon
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Left-side text (Wind speed units)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Atmospheric Pressure',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 19,
-                        ),
-                      ),
-                      Text(
-                        'units',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 19,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // Right-side unit text with arrow dropdown
-                  GestureDetector(
-                    onTap: _showPressureUnitDialog, // Method to show dialog
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          // Aligns text to the right
-                          children: [
-                            Text(
-                              Provider.of<UnitData>(context)
-                                          .selectedPressureUnit ==
-                                      'mb'
-                                  ? 'Millibar'
-                                  : 'Inches of',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              Provider.of<UnitData>(context)
-                                          .selectedPressureUnit ==
-                                      'mb'
-                                  ? '(mb)'
-                                  : 'mercury (inHg)',
-                              // Smaller unit abbreviation below
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 5), // Space between text and icon
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Left-side text (Wind speed units)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Precipitation',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 19,
-                        ),
-                      ),
-                      Text(
-                        'units',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 19,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // Right-side unit text with arrow dropdown
-                  GestureDetector(
-                    onTap: _showPrecipitationUnitDialog,
-                    // Method to show dialog
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          // Aligns text to the right
-                          children: [
-                            Text(
-                              Provider.of<UnitData>(context)
-                                          .selectedPrecipitationUnit ==
-                                      'mm'
-                                  ? 'Millimeters'
-                                  : 'Inches',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            ),
-                            Text(
-                              Provider.of<UnitData>(context)
-                                          .selectedPrecipitationUnit ==
-                                      'mm'
-                                  ? '(mm)'
-                                  : '(in)',
-                              // Smaller unit abbreviation below
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 5), // Space between text and icon
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              )
             ],
           ),
         ),

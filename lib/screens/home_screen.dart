@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:clima_weather/screens/search_cities.dart';
 import 'package:clima_weather/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -142,10 +145,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   image: AssetImage(isWeatherClear(
                       widget.weatherData!['current']['condition']['text'])
                       ? 'images/pexels-elia-clerici-282848-912110.jpg'
-                      : 'images/pexels-pixabay-414659.jpg'),
+                      : 'images/cloudy-image.jpg'),
                   fit: BoxFit.cover,
                   // Fills the entire Scaffold but keeps the image centered
-                  alignment: Alignment.center, // Ensures the image is centered
+                  alignment: Alignment
+                      .center, // Ensures the image is centered
                 ),
               ),
             ),
@@ -161,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        child: Icon(
+                        child: const Icon(
                           Icons.my_location_outlined,
                           color: Colors.white,
                           size: 30.0,
@@ -174,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           GestureDetector(
-                            child: Icon(
+                            child: const Icon(
                               Icons.search,
                               color: Colors.white,
                               size: 30.0,
@@ -406,13 +410,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .of<UnitData>(context)
                                                     .selectedTempUnit ==
                                                     '°C' ?
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][1]
                                                 ['day']['avgtemp_c'] : widget
                                                     .weatherData!['forecast']
                                                 ['forecastday'][1]
                                                 ['day']['avgtemp_f'],
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][1]
                                                 ['day']['condition']
                                                 ['text']),
@@ -464,13 +470,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .of<UnitData>(context)
                                                     .selectedTempUnit ==
                                                     '°C' ?
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][2]
                                                 ['day']['avgtemp_c'] : widget
                                                     .weatherData!['forecast']
                                                 ['forecastday'][2]
                                                 ['day']['avgtemp_f'],
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][2]
                                                 ['day']['condition']
                                                 ['text']),
@@ -523,13 +531,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .of<UnitData>(context)
                                                     .selectedTempUnit ==
                                                     '°C' ?
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][3]
                                                 ['day']['avgtemp_c'] : widget
                                                     .weatherData!['forecast']
                                                 ['forecastday'][3]
                                                 ['day']['avgtemp_f'],
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][3]
                                                 ['day']['condition']
                                                 ['text']),
@@ -581,13 +591,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .of<UnitData>(context)
                                                     .selectedTempUnit ==
                                                     '°C' ?
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][4]
                                                 ['day']['avgtemp_c'] : widget
                                                     .weatherData!['forecast']
                                                 ['forecastday'][4]
                                                 ['day']['avgtemp_f'],
-                                                widget.weatherData!['forecast']
+                                                widget
+                                                    .weatherData!['forecast']
                                                 ['forecastday'][4]
                                                 ['day']['condition']
                                                 ['text']),
@@ -654,7 +666,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       SizedBox(height: 20.0),
                                       Text(
-                                        '${widget.weatherData!['current']['uv']
+                                        '${widget
+                                            .weatherData!['current']['uv']
                                             .toString()}',
                                         style: TextStyle(
                                             fontSize: 20.0,

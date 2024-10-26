@@ -6,6 +6,15 @@
     <string>We need your location to provide weather data.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>We need your location to provide weather data even when the app is in the background.</string>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>fetch</string>
+      <string>remote-notification</string>
+    </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location to show the weather information.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location to show the weather information.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
